@@ -4,11 +4,6 @@
   var main = document.querySelector("main");
   if (!main) return;
 
-  var revealSections = main.querySelectorAll(
-    ":scope > section:not(.mv)",
-  );
-  if (!revealSections.length) return;
-
   var reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   );
@@ -16,9 +11,39 @@
     return;
   }
 
-  for (var i = 0; i < revealSections.length; i++) {
-    revealSections[i].classList.add("scroll-reveal-item");
-  }
+  var revealSelector = [
+    ".mirae__title",
+    ".history__title",
+    ".history__row",
+    ".con3__title",
+    ".con3__card",
+    ".con4__title",
+    ".con4__bubble",
+    ".con4__note",
+    ".con5__title",
+    ".con5__sub",
+    ".con5__lead",
+    ".con5__card",
+    ".tasks__title",
+    ".tasks__description",
+    ".tasks__tabs-wrap",
+    ".tasks__group-trigger",
+    ".tasks__card",
+    ".requirement__title",
+    ".requirement__item",
+    ".requirement__condition-list li",
+    ".requirement__notice",
+    ".requirement__track-title",
+    ".requirement__step",
+    ".exposition__intro",
+    ".exposition__date-cell",
+    ".con8__card",
+    ".con9__title",
+    ".con9__timer",
+    ".con9__earth-link",
+    ".con9__note",
+  ].join(", ");
+  var observedItems = new WeakSet();
 
   var observer = new IntersectionObserver(
     function (entries) {
@@ -29,11 +54,43 @@
         );
       }
     },
-    { rootMargin: "-15% 0px -25% 0px", threshold: 0 },
+    { rootMargin: "-5% 0px -5% 0px", threshold: 0.05 },
   );
 
-  for (var j = 0; j < revealSections.length; j++) {
-    observer.observe(revealSections[j]);
+  function observeRevealItem(item) {
+    if (observedItems.has(item)) return;
+    observedItems.add(item);
+    item.classList.add("scroll-reveal-item");
+    observer.observe(item);
+  }
+
+  function observeAddedNodes(nodes) {
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (node.nodeType !== 1) continue;
+      if (node.matches(revealSelector)) observeRevealItem(node);
+      var descendants = node.querySelectorAll(revealSelector);
+      for (var j = 0; j < descendants.length; j++) {
+        observeRevealItem(descendants[j]);
+      }
+    }
+  }
+
+  observeAddedNodes([main]);
+
+  var dynamicContainers = main.querySelectorAll(
+    ".con5__list, #tasks-groups, .exposition__schedule",
+  );
+  var contentObserver = new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      observeAddedNodes(mutations[i].addedNodes);
+    }
+  });
+  for (var k = 0; k < dynamicContainers.length; k++) {
+    contentObserver.observe(dynamicContainers[k], {
+      childList: true,
+      subtree: true,
+    });
   }
 })();
 
