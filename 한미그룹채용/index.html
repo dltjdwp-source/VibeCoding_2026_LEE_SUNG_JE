@@ -9,6 +9,14 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="./hanmi-eye-tracking/hanmi-eye-tracking/player.css"
+    />
+    <link
+      rel="stylesheet"
+      href="./hanmi-reading-eye-tracking/player.css"
+    />
     <style>
       /* =========================================================
        Design Tokens
@@ -110,6 +118,52 @@
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border: 0;
+      }
+
+      .updown {
+        animation: character-updown 2s ease-in-out infinite;
+      }
+      .leftright {
+        animation: character-leftright 2s ease-in-out infinite;
+      }
+      .bigsmall {
+        animation: character-bigsmall 2s ease-in-out infinite;
+      }
+
+      @keyframes character-updown {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        50% {
+          translate: 0 -10%;
+        }
+      }
+      @keyframes character-leftright {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        50% {
+          translate: 10% 0;
+        }
+      }
+      @keyframes character-bigsmall {
+        0%,
+        100% {
+          scale: 0.9;
+        }
+        50% {
+          scale: 1.1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .updown,
+        .leftright,
+        .bigsmall {
+          animation: none;
+        }
       }
 
       a:focus-visible,
@@ -412,6 +466,26 @@
 
       .mv__img {
         height: auto;
+      }
+      .mv__img--micro.updown {
+        animation-duration: 3.2s;
+        animation-delay: -1.1s;
+      }
+      .mv__img--char1.updown {
+        animation-duration: 2.6s;
+        animation-delay: -0.4s;
+      }
+      .mv__img--char2.updown {
+        animation-duration: 3.7s;
+        animation-delay: -2.2s;
+      }
+      .mv__img--char3.updown {
+        animation-duration: 2.9s;
+        animation-delay: -1.8s;
+      }
+      .mv__img--char4.updown {
+        animation-duration: 3.4s;
+        animation-delay: -0.9s;
       }
       .mv__img--micro {
         left: calc((766 - var(--vx)) * var(--u));
@@ -1084,6 +1158,7 @@
         --x: 1.5;
         --y: 114;
         --w: 995;
+        pointer-events: auto;
       }
       .mirae__star {
         z-index: 3;
@@ -1958,17 +2033,7 @@
         backdrop-filter: blur(2px);
         box-shadow: 0 calc(6 * var(--cs)) calc(24 * var(--cs))
           rgba(230, 90, 60, 0.08);
-        transition:
-          transform var(--transition),
-          box-shadow var(--transition);
-      }
-      .con3__card:hover,
-      .con3__card:focus-visible {
-        /* 마우스 오버시 카드 배경색 투명도 없애기 */
-        transform: translateY(calc(-4 * var(--cs)));
-        background: #fef7f5;
-        box-shadow: 0 calc(10 * var(--cs)) calc(30 * var(--cs))
-          rgba(230, 90, 60, 0.16);
+        transition: none;
       }
       .con3__photo {
         margin: 0;
@@ -2029,20 +2094,38 @@
             rgba(255, 255, 255, 0.5),
           0 calc(2 * var(--cs)) calc(6 * var(--cs)) rgba(229, 96, 60, 0.3);
         color: var(--color-white);
-        transition: transform var(--transition);
+        cursor: default;
+        transition: none;
+      }
+      @media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
+        .con3__card {
+          transition:
+            transform var(--transition),
+            box-shadow var(--transition);
+        }
+        .con3__card:hover,
+        .con3__card:focus-visible {
+          transform: translateY(calc(-4 * var(--cs)));
+          background: #fef7f5;
+          box-shadow: 0 calc(10 * var(--cs)) calc(30 * var(--cs))
+            rgba(230, 90, 60, 0.16);
+        }
+        .con3__arrow {
+          cursor: pointer;
+          transition: transform var(--transition);
+        }
+        .con3__card:hover .con3__arrow,
+        .con3__card:focus-visible .con3__arrow {
+          transform: translateX(calc(3 * var(--cs)));
+          transition:
+            transform var(--transition) (--transition),
+            box-shadow var(--transition) background 0.5s;
+          background: #e5603c;
+        }
       }
       .con3__arrow svg {
         width: 52%;
         height: auto;
-      }
-      .con3__card:hover .con3__arrow,
-      .con3__card:focus-visible .con3__arrow {
-        transform: translateX(calc(3 * var(--cs)));
-        /* 마우스 오버시 카드 배경색 투명도 없애기 */
-        transition:
-          transform var(--transition) (--transition),
-          box-shadow var(--transition) background 0.5s;
-        background: #e5603c;
       }
 
       /* ---- 버튼 (공통 .btn 의 hover 반전 효과 재사용) ---- */
@@ -3248,7 +3331,7 @@
         }
         .tasks__character {
           width: 700px;
-          height: 400px;
+          height: 394px;
         }
         .tasks__inner {
           width: calc(100% - 48px);
@@ -3298,7 +3381,7 @@
         }
         .tasks__character {
           width: 420px;
-          height: 250px;
+          height: 236px;
         }
         .tasks__inner {
           width: 100%;
@@ -4707,27 +4790,27 @@
           <!-- Container.png : 현미경 / Container-1.png : 파랑 / Container-2.png : 주황 / mv_char3_png.png : 보라 / Container-3.png : 노랑 -->
           <div class="mv__visual" aria-hidden="true">
             <img
-              class="mv__img mv__img--micro"
+              class="mv__img mv__img--micro updown"
               src="./images/Container.png"
               alt=""
             />
             <img
-              class="mv__img mv__img--char1"
+              class="mv__img mv__img--char1 updown"
               src="./images/Container-1.png"
               alt=""
             />
             <img
-              class="mv__img mv__img--char2"
+              class="mv__img mv__img--char2 updown"
               src="./images/Container-2.png"
               alt=""
             />
             <img
-              class="mv__img mv__img--char3"
+              class="mv__img mv__img--char3 updown"
               src="./images/mv_char3_png.png"
               alt=""
             />
             <img
-              class="mv__img mv__img--char4"
+              class="mv__img mv__img--char4 updown"
               src="./images/Container-3.png"
               alt=""
             />
@@ -4822,15 +4905,19 @@
         />
 
         <!-- 산 위를 걷는 캐릭터 -->
-        <img
-          class="mirae__deco mirae__walking"
-          src="./images/mirae_walking.png"
-          alt=""
-          aria-hidden="true"
-          width="2880"
-          height="1770"
-          loading="lazy"
-        />
+        <div
+          class="mirae__deco mirae__walking hanmi-walker"
+          data-hanmi-walker
+          data-hanmi-player="walking"
+        >
+          <canvas
+            width="1920"
+            height="1080"
+            role="img"
+            aria-label="마우스를 바라보며 걷는 캐릭터"
+          ></canvas>
+          <span data-status role="status">이미지 준비 중</span>
+        </div>
 
         <!-- 별 -->
         <img
@@ -4865,7 +4952,7 @@
               53<span>th</span>
             </p>
             <img
-              class="history__deco history__deco--star"
+              class="history__deco history__deco--star updown"
               src="./images/obj_star_big.png"
               alt=""
               aria-hidden="true"
@@ -4916,7 +5003,7 @@
                   />
                 </figure>
                 <img
-                  class="history__deco history__deco--beaker"
+                  class="history__deco history__deco--beaker updown"
                   src="./images/obj_beaker.png"
                   alt=""
                   aria-hidden="true"
@@ -4978,7 +5065,7 @@
                   loading="lazy"
                 />
                 <img
-                  class="history__deco history__deco--micro"
+                  class="history__deco history__deco--micro updown"
                   src="./images/obj_microscope.png"
                   alt=""
                   aria-hidden="true"
@@ -5156,7 +5243,7 @@
                   />
                 </figure>
                 <img
-                  class="history__deco history__deco--mol"
+                  class="history__deco history__deco--mol updown"
                   src="./images/obj_mol_big.png"
                   alt=""
                   aria-hidden="true"
@@ -5179,7 +5266,7 @@
                 loading="lazy"
               />
               <img
-                class="history__deco history__deco--char"
+                class="history__deco history__deco--char leftright"
                 src="./images/obj_con2_char.png"
                 alt=""
                 aria-hidden="true"
@@ -5243,7 +5330,7 @@
 
           <!-- 장식 : 로고(제목 왼쪽 위) / 캐릭터(우측 상단) / 약병(좌측 하단, 모바일 제외) -->
           <img
-            class="con3__deco con3__logo"
+            class="con3__deco con3__logo updown"
             src="./images/con3_logo.png"
             alt=""
             aria-hidden="true"
@@ -5251,7 +5338,7 @@
             height="193"
           />
           <img
-            class="con3__deco con3__char"
+            class="con3__deco con3__char leftright"
             src="./images/con3_char.png"
             alt=""
             aria-hidden="true"
@@ -5259,7 +5346,7 @@
             height="458"
           />
           <img
-            class="con3__deco con3__bottle"
+            class="con3__deco con3__bottle updown"
             src="./images/con3_bottle.png"
             alt=""
             aria-hidden="true"
@@ -5366,7 +5453,7 @@
 
           <!-- 장식 이미지 (분자 구조는 섹션 하단 기준) -->
           <img
-            class="con4__deco con4__mol"
+            class="con4__deco con4__mol updown"
             src="./images/inno_chemical2.png"
             alt=""
             aria-hidden="true"
@@ -5386,7 +5473,7 @@
               loading="lazy"
             />
             <img
-              class="con4__deco con4__atom"
+              class="con4__deco con4__atom bigsmall"
               src="./images/inno_chemical3.png"
               alt=""
               aria-hidden="true"
@@ -5609,7 +5696,7 @@
 
           <!-- 장식 : 주황 캐릭터(우측 상단) / 보라 캐릭터(좌측 하단, 섹션 바닥에 붙음) -->
           <img
-            class="con5__deco con5__char"
+            class="con5__deco con5__char updown"
             src="./images/con5_char.png"
             alt=""
             aria-hidden="true"
@@ -5648,13 +5735,19 @@
             width="2880"
             height="720"
           />
-          <img
-            class="tasks__character"
-            src="./images/tasks_ch.png"
-            alt=""
-            width="2048"
-            height="1386"
-          />
+          <div
+            class="tasks__character hanmi-walker"
+            data-hanmi-walker
+            data-hanmi-player="reading"
+          >
+            <canvas
+              width="1920"
+              height="1080"
+              role="img"
+              aria-label="마우스를 바라보며 돋보기를 든 캐릭터"
+            ></canvas>
+            <span data-status role="status">이미지 준비 중</span>
+          </div>
         </div>
         <div class="tasks__inner">
           <div class="tasks__head">
@@ -5728,7 +5821,7 @@
             한미그룹과 함께하는 문은<br />활짝 열려 있습니다
           </h2>
           <img
-            class="requirement__bulb"
+            class="requirement__bulb updown"
             src="./images/require_obj_bulb.png"
             alt=""
             width="360"
@@ -5916,7 +6009,7 @@
         <div class="exposition__inner">
           <div class="exposition__intro">
             <img
-              class="exposition__character"
+              class="exposition__character updown"
               src="./images/expo_char.png"
               alt=""
               width="698"
@@ -6067,7 +6160,7 @@
       <section class="con8" aria-label="한미그룹 지원 링크">
         <div class="con8__inner">
           <img
-            class="con8__character"
+            class="con8__character updown"
             src="./images/con8_char.png"
             alt=""
             width="281"
@@ -7624,5 +7717,9 @@
         timer = window.setInterval(updateCountdown, 1000);
       })();
     </script>
+    <script src="./hanmi-eye-tracking/hanmi-eye-tracking/metadata.js"></script>
+    <script src="./hanmi-eye-tracking/hanmi-eye-tracking/player.js"></script>
+    <script src="./hanmi-reading-eye-tracking/metadata-v3.js"></script>
+    <script src="./hanmi-reading-eye-tracking/player-v3.js"></script>
   </body>
 </html>

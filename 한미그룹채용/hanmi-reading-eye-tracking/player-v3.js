@@ -12,7 +12,8 @@
       this.frames = [];
       this.index = 0; this.elapsed = 0; this.last = 0; this.raf = 0;
       this.ready = false; this.visible = true; this.paused = false;
-      this.tracking = true; this.pointer = null; this.gaze = { x: 0, y: 0 };
+      this.pointerMedia = matchMedia('(min-width: 1025px) and (hover: hover) and (pointer: fine)');
+      this.tracking = this.pointerMedia.matches; this.pointer = null; this.gaze = { x: 0, y: 0 };
       this.reduce = matchMedia('(prefers-reduced-motion: reduce)');
       this.paused = this.reduce.matches;
       this.tick = this.tick.bind(this);
@@ -33,13 +34,28 @@
       this.onReduce = e => {this.paused=e.matches;this.syncButton();this.update();};
       this.reduce.addEventListener('change', this.onReduce);
       this.pauseButton = root.querySelector('[data-pause]');
+      this.trackControl = root.querySelector('[data-track]');
+      this.syncTrackControl();
+      this.onPointerMedia = e => {
+        this.tracking = e.matches;
+        this.pointer = null;
+        this.gaze = { x: 0, y: 0 };
+        this.syncTrackControl();
+        this.update();
+      };
+      this.pointerMedia.addEventListener('change', this.onPointerMedia);
       this.pauseButton?.addEventListener('click', () => {
         this.paused=!this.paused;this.syncButton();this.update();
       });
-      root.querySelector('[data-track]')?.addEventListener('change', e => {
-        this.tracking=e.target.checked; this.update();
+      this.trackControl?.addEventListener('change', e => {
+        this.tracking=this.pointerMedia.matches && e.target.checked; this.update();
       });
       this.syncButton(); this.load();
+    }
+    syncTrackControl() {
+      if(!this.trackControl)return;
+      this.trackControl.disabled=!this.pointerMedia.matches;
+      this.trackControl.checked=this.tracking;
     }
     syncButton() {
       if(!this.pauseButton)return;
@@ -139,9 +155,10 @@
       cancelAnimationFrame(this.raf);this.observer.disconnect();
       document.removeEventListener('visibilitychange',this.onVisibility);
       this.reduce.removeEventListener('change',this.onReduce);
+      this.pointerMedia.removeEventListener('change',this.onPointerMedia);
       this.ready=false;this.frames=[];
     }
   }
   window.HanmiWalker=HanmiWalker;
-  document.querySelectorAll('[data-hanmi-walker]').forEach(root=>{root.hanmiWalker=new HanmiWalker(root);});
+  document.querySelectorAll('[data-hanmi-walker]:not([data-hanmi-player="walking"])').forEach(root=>{root.hanmiWalker=new HanmiWalker(root);});
 })();
