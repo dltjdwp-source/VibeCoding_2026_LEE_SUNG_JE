@@ -30,10 +30,10 @@ const SectionCon8 = () => (
                 <span className="con8__card-title">
                   한미그룹의
                   <span className="con8__marked-word">
-                    문화와 복지가 
+                   문화와 복지가
                     <img className="con8__doodle con8__doodle--four" src="./images/con8_Image-1.png" alt="" />
                   </span>
-                  궁금하다면?
+                   궁금하다면?
                 </span>
                 <img className="con8__doodle con8__doodle--one" src="./images/con8_Image.png" alt="" />
                 <img className="con8__doodle con8__doodle--two" src="./images/con8_Image-2.png" alt="" />
@@ -57,10 +57,10 @@ const SectionCon8 = () => (
                 <span className="con8__card-title">
                   한미그룹의
                   <span className="con8__marked-word">
-                    직무가
+                   직무가
                     <img className="con8__doodle con8__doodle--three" src="./images/con8_Image-3.png" alt="" />
                   </span>
-                  궁금하다면?
+                   궁금하다면?
                 </span>
                 <img className="con8__doodle con8__doodle--one" src="./images/con8_Image-4.png" alt="" />
                 <span className="con8__card-link">
@@ -83,7 +83,7 @@ const SectionCon8 = () => (
                 <span className="con8__card-title">
                   한미그룹의
                   <span className="con8__marked-word">
-                    채용소식을
+                  채용소식을
                     <img className="con8__doodle con8__doodle--five" src="./images/con8_Image-5.png" alt="" />
                   </span>
                   빠르게 받고 싶다면?
