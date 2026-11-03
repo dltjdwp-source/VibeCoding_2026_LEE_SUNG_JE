@@ -1,0 +1,55 @@
+/* =========================================================
+       Common : Layout (main 1920px / inner 1440px)
+       ========================================================= */
+      main {
+        width: 100%;
+        max-width: var(--page-max);
+        margin: 0 auto;
+      }
+      .inner {
+        position: relative;
+        width: 100%;
+        max-width: var(--inner-max);
+        margin: 0 auto;
+      }
+
+      /* =========================================================
+       Common : Buttons (hover → 흰색/빨간색 반전)
+       ========================================================= */
+      .btn {
+        position: relative;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 500px;
+        color: var(--color-white);
+        font-weight: 600;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        box-shadow: inset 0 0 0 0 var(--color-red);
+        transition:
+          color var(--transition),
+          box-shadow var(--transition),
+          background-color var(--transition);
+      }
+      .btn::before {
+        /* 반전용 흰색 레이어 */
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--color-white);
+        opacity: 0;
+        transition: opacity var(--transition);
+      }
+      .btn:hover,
+      .btn:focus-visible {
+        color: var(--color-red);
+        box-shadow: inset 0 0 0 2px var(--color-red);
+      }
+      .btn:hover::before,
+      .btn:focus-visible::before {
+        opacity: 1;
+      }
