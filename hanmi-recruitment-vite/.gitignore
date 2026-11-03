@@ -7,8 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
+# .gitignore 파일은 Git에서 추적하지 않을 파일이나 디렉토리를 지정하는 데 사용됩니다. 
+# 이 파일에 나열된 항목들은 Git이 무시하게 되며, 버전 관리에서 제외됩니다.
+
+# node_modules/ 디렉토리는 프로젝트의 의존성 패키지들이 설치되는 곳으로, 일반적으로 Git에 포함시키지 않습니다. 
+# 대신, package.json과 package-lock.json 또는 yarn.lock 파일을 통해 의존성을 관리합니다.
+
+# dist/ 결과 파일은 배포 시 필요하지 않으므로 git에 포함시키지 않습니다. 
+# 하지만, 배포 시 dist 결과 파일이 필요하다면 git에 포함시켜도 됩니다.
 dist-ssr
 *.local
 
